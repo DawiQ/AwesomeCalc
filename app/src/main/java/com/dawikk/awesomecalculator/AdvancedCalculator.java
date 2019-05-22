@@ -8,7 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class Calculator extends AppCompatActivity {
+public class AdvancedCalculator extends AppCompatActivity {
 
     /* Event  buttons */
     public static Button BtnMC;
@@ -38,6 +38,11 @@ public class Calculator extends AppCompatActivity {
     public static Button Btn7;
     public static Button Btn8;
     public static Button Btn9;
+
+    public static Button BtnSilnia;
+    public static Button BtnKwadrat;
+    public static Button BtnSqrt;
+    public static Button BtnLn;
 
     /* EditText */
     public static EditText lcd;
@@ -76,7 +81,7 @@ public class Calculator extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_calculator);
+        setContentView(R.layout.activity_advanced_calculator);
 
         getSupportActionBar().hide();
 
@@ -106,6 +111,36 @@ public class Calculator extends AppCompatActivity {
         BtnPlus = findViewById( R.id.button17 );
         BtnEquals = findViewById( R.id.button21 );
         BtnDot = findViewById( R.id.button23 );
+
+        BtnSilnia = findViewById( R.id.button24 );
+        BtnKwadrat = findViewById( R.id.button25 );
+        BtnSqrt = findViewById( R.id.button26 );
+        BtnLn = findViewById( R.id.button27 );
+
+        BtnSilnia.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                silnia();
+            }
+        });
+        BtnKwadrat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                kwadrat();
+            }
+        });
+        BtnSqrt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sqrt();
+            }
+        });
+        BtnLn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ln();
+            }
+        });
 
         BtnPlusMinusBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -250,6 +285,52 @@ public class Calculator extends AppCompatActivity {
 
     }
 
+    public void silnia(){
+        number = lcd.getText().toString();
+
+        if( !number.equals("") ){
+            int iloczyn = 1;
+            for (int i=1; i <= Integer.parseInt( number ); i++) {
+                iloczyn *= i;
+            }
+
+            number = Integer.toString( iloczyn );
+            numberD = (float) Double.parseDouble( number );
+            lcd.setText( numberD.toString() );
+        }else{
+            Toast.makeText(getApplicationContext(),"Zly parametr",Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void kwadrat(){
+        number = lcd.getText().toString();
+        numberD = Float.parseFloat( number ) * Float.parseFloat( number );
+
+        lcd.setText( numberD.toString() );
+    }
+
+    public void sqrt(){
+        if( !number.equals("") && Integer.parseInt( number ) > 0 ){
+            number = lcd.getText().toString();
+            numberD = (float) Math.sqrt( Float.parseFloat( number ) );
+
+            lcd.setText( numberD.toString() );
+        }else{
+            Toast.makeText(getApplicationContext(),"Zly parametr",Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void ln(){
+        if( !number.equals("") && Integer.parseInt( number ) > 0 ) {
+            number = lcd.getText().toString();
+            numberD = (float) Math.log(Float.parseFloat(number));
+
+            lcd.setText(numberD.toString());
+        }else{
+            Toast.makeText(getApplicationContext(),"Zly parametr",Toast.LENGTH_SHORT).show();
+        }
+    }
+
     public void changeSign(){
         number = lcd.getText().toString();
         numberD = Float.parseFloat( number ) * -1;
@@ -309,19 +390,19 @@ public class Calculator extends AppCompatActivity {
     public void makeAction(){
         switch( this.action ){
             case -1:
-                    savedNumberD = Float.parseFloat( lcd.getText().toString() );
-                    break;
+                savedNumberD = Float.parseFloat( lcd.getText().toString() );
+                break;
             case 1: savedNumberD = numberD + savedNumberD;
-                    break;
+                break;
             case 2: savedNumberD = savedNumberD - numberD;
-                    break;
+                break;
             case 3: savedNumberD = savedNumberD * numberD;
-                    break;
+                break;
             case 4: if( numberD != 0.0f && !number.equals("0") )
-                        savedNumberD = savedNumberD / numberD;
-                    else
-                        Toast.makeText(getApplicationContext(),"Nie dzielimy przez zero :o",Toast.LENGTH_SHORT).show();
-                    break;
+                savedNumberD = savedNumberD / numberD;
+            else
+                Toast.makeText(getApplicationContext(),"Nie dzielimy przez zero :o",Toast.LENGTH_SHORT).show();
+                break;
             default: break;
         }
 

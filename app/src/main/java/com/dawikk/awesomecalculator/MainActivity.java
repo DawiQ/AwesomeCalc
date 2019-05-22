@@ -9,6 +9,7 @@ import android.widget.Button;
 public class MainActivity extends AppCompatActivity {
 
     public static Button turnOnCalc;
+    public static Button turnOnCalc2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +22,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(MainActivity.this, Calculator.class));
+            }
+        });
+
+        turnOnCalc2 = findViewById( R.id.butto2 );
+
+        turnOnCalc2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, AdvancedCalculator.class));
             }
         });
     }
