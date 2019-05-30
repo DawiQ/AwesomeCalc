@@ -21,6 +21,7 @@
         <EditText
             android:id="@+id/editText"
             android:layout_marginTop="30dp"
+            android:layout_width="match_parent"
             android:clickable="false"
             android:ems="10"
             android:enabled="false"
@@ -76,6 +77,54 @@
             android:layout_margin="2dp"
             android:textColor="@color/colorOfButton"
             android:text="MR" />
+
+        <Button
+            android:id="@+id/button28"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_columnWeight="1"
+            app:layout_gravity="fill_horizontal"
+            app:layout_rowWeight="1"
+            android:background="#3C3C3C"
+            android:layout_margin="2dp"
+            android:textColor="@color/colorOfButton"
+            android:text="sin" />
+
+        <Button
+            android:id="@+id/button29"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_columnWeight="1"
+            app:layout_gravity="fill_horizontal"
+            app:layout_rowWeight="1"
+            android:background="#3C3C3C"
+            android:layout_margin="2dp"
+            android:textColor="@color/colorOfButton"
+            android:text="cos" />
+
+        <Button
+            android:id="@+id/button30"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_columnWeight="1"
+            app:layout_gravity="fill_horizontal"
+            app:layout_rowWeight="1"
+            android:background="#3C3C3C"
+            android:layout_margin="2dp"
+            android:textColor="@color/colorOfButton"
+            android:text="tan" />
+
+        <Button
+            android:id="@+id/button31"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_columnWeight="1"
+            app:layout_gravity="fill_horizontal"
+            app:layout_rowWeight="1"
+            android:background="#3C3C3C"
+            android:layout_margin="2dp"
+            android:textColor="@color/colorOfButton"
+            android:text="log" />
 
         <Button
             android:id="@+id/button24"
@@ -181,6 +230,7 @@
             app:layout_gravity="fill_horizontal"
             app:layout_rowWeight="1"
             android:background="#24272B"
+            android:textColor="@color/colorOfButton"
             android:layout_margin="2dp"
             android:text="7" />
 
@@ -192,6 +242,7 @@
             app:layout_gravity="fill_horizontal"
             app:layout_rowWeight="1"
             android:background="#24272B"
+            android:textColor="@color/colorOfButton"
             android:layout_margin="2dp"
             android:text="8" />
 
@@ -203,6 +254,7 @@
             app:layout_gravity="fill_horizontal"
             app:layout_rowWeight="1"
             android:background="#24272B"
+            android:textColor="@color/colorOfButton"
             android:layout_margin="2dp"
             android:text="9" />
 
@@ -226,6 +278,7 @@
             app:layout_gravity="fill_horizontal"
             app:layout_rowWeight="1"
             android:background="#24272B"
+            android:textColor="@color/colorOfButton"
             android:layout_margin="2dp"
             android:text="4" />
 
@@ -237,6 +290,7 @@
             app:layout_gravity="fill_horizontal"
             app:layout_rowWeight="1"
             android:background="#24272B"
+            android:textColor="@color/colorOfButton"
             android:layout_margin="2dp"
             android:text="5" />
 
@@ -248,6 +302,7 @@
             app:layout_gravity="fill_horizontal"
             app:layout_rowWeight="1"
             android:background="#24272B"
+            android:textColor="@color/colorOfButton"
             android:layout_margin="2dp"
             android:text="6" />
 
@@ -271,6 +326,7 @@
             app:layout_gravity="fill_horizontal"
             app:layout_rowWeight="1"
             android:background="#24272B"
+            android:textColor="@color/colorOfButton"
             android:layout_margin="2dp"
             android:text="1" />
 
@@ -282,6 +338,7 @@
             app:layout_gravity="fill_horizontal"
             app:layout_rowWeight="1"
             android:background="#24272B"
+            android:textColor="@color/colorOfButton"
             android:layout_margin="2dp"
             android:text="2" />
 
@@ -293,6 +350,7 @@
             app:layout_gravity="fill_horizontal"
             app:layout_rowWeight="1"
             android:background="#24272B"
+            android:textColor="@color/colorOfButton"
             android:layout_margin="2dp"
             android:text="3" />
 
@@ -316,6 +374,7 @@
             app:layout_gravity="fill_horizontal"
             app:layout_rowWeight="1"
             android:background="#24272B"
+            android:textColor="@color/colorOfButton"
             android:layout_margin="2dp"
             app:layout_columnSpan="2"
             android:text="0" />
@@ -328,9 +387,10 @@
             app:layout_gravity="fill_horizontal"
             app:layout_rowWeight="1"
             android:background="#24272B"
+            android:textColor="@color/colorOfButton"
             android:layout_margin="2dp"
             app:layout_columnSpan="1"
-            android:text="=" />
+            android:text="." />
 
     </android.support.v7.widget.GridLayout>
 

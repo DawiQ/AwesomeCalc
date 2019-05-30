@@ -2,25 +2,84 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:grid="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#333333"
+    android:padding="5dp"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="20dp"
-        android:text="Podstawowy"
-        tools:layout_editor_absoluteX="136dp"
-        tools:layout_editor_absoluteY="16dp" />
+    <android.support.v7.widget.GridLayout
+        app:columnCount="1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <Button
-        android:id="@+id/butto2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="20dp"
-        android:text="Zaawansowany"
-        app:layout_constraintTop_toBottomOf="@+id/button"
-        tools:layout_editor_absoluteX="136dp" />
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="7dp"
+            android:gravity="center"
+            android:text="Calculator"
+            android:textColor="#FFFFFF"
+            android:textSize="30sp"
+            app:layout_columnWeight="1"
+            app:layout_gravity="fill_horizontal"
+            app:layout_rowWeight="1" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_columnWeight="1"
+            app:layout_gravity="fill_horizontal"
+            app:layout_rowWeight="1"
+            android:background="#3C3C3C"
+            android:layout_margin="7dp"
+            android:textColor="@color/colorOfButton"
+            android:text="Simple" />
+
+        <Button
+            android:id="@+id/butto2"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_columnWeight="1"
+            app:layout_gravity="fill_horizontal"
+            app:layout_rowWeight="1"
+            android:background="#3C3C3C"
+            android:layout_margin="7dp"
+            android:textColor="@color/colorOfButton"
+            android:text="Advanced" />
+
+        <Button
+            android:id="@+id/butto3"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_columnWeight="1"
+            app:layout_gravity="fill_horizontal"
+            app:layout_rowWeight="1"
+            android:background="#3C3C3C"
+            android:layout_margin="7dp"
+            android:textColor="@color/colorOfButton"
+            android:text="About" />
+
+        <Button
+            android:id="@+id/butto4"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_columnWeight="1"
+            app:layout_gravity="fill_horizontal"
+            app:layout_rowWeight="1"
+            android:background="#3C3C3C"
+            android:layout_margin="7dp"
+            android:textColor="@color/colorOfButton"
+            android:text="Exit" />
+
+    </android.support.v7.widget.GridLayout>
+
 </android.support.constraint.ConstraintLayout>

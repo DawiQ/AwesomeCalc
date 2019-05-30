@@ -1,12 +1,16 @@
 package com.dawikk.awesomecalculator;
 
 import android.content.Intent;
+import android.os.strictmode.IntentReceiverLeakedViolation;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import java.math.BigDecimal;
+import java.math.MathContext;
 
 public class AdvancedCalculator extends AppCompatActivity {
 
@@ -44,21 +48,27 @@ public class AdvancedCalculator extends AppCompatActivity {
     public static Button BtnSqrt;
     public static Button BtnLn;
 
+    public static Button BtnSin;
+    public static Button BtnCos;
+    public static Button BtnTan;
+    public static Button BtnLog;
+
     /* EditText */
     public static EditText lcd;
 
     public static Integer containDot = 0;
     public static Integer addDot = 0;
 
-    public static String savedNumber = "0";
+    public static Integer action = -1;
+    public static Integer previousAction = -3;
+    public static Integer changed = 0;
+
     public static String number = "0";
     public static String memory = "0";
 
-    public static Integer action = -1;
-
-    public static Float memoryD = 0.0f;
-    public static Float numberD = 0.0f;
-    public static Float savedNumberD = 0.0f;
+    public static BigDecimal memoryD = new BigDecimal("0");
+    public static BigDecimal numberD = new BigDecimal("0");
+    public static BigDecimal savedNumberD = new BigDecimal("0");
 
     @Override
     protected void onResume()
@@ -66,16 +76,13 @@ public class AdvancedCalculator extends AppCompatActivity {
         super.onResume();
 
         action = -1;
+        previousAction = -3;
         containDot = 0;
         addDot = 0;
 
-        savedNumber = "0";
-        number = "";
-        memory = "0";
-
-        numberD = 0.0f;
-        memoryD = 0.0f;
-        savedNumberD = 0.0f;
+        numberD = new BigDecimal("0");
+        memoryD = new BigDecimal("0");
+        savedNumberD = new BigDecimal("0");
     }
 
     @Override
@@ -86,7 +93,7 @@ public class AdvancedCalculator extends AppCompatActivity {
         getSupportActionBar().hide();
 
         lcd = findViewById( R.id.editText );
-        lcd.setText( "" );
+        lcd.setText( "0" );
 
         Btn0 = findViewById( R.id.button22 );
         Btn1 = findViewById( R.id.button18 );
@@ -117,28 +124,59 @@ public class AdvancedCalculator extends AppCompatActivity {
         BtnSqrt = findViewById( R.id.button26 );
         BtnLn = findViewById( R.id.button27 );
 
+        BtnSin = findViewById( R.id.button28 );
+        BtnCos = findViewById( R.id.button29 );
+        BtnTan = findViewById( R.id.button30 );
+        BtnLog = findViewById( R.id.button31 );
+
+
         BtnSilnia.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                silnia();
+                createAction( 5 );
             }
         });
         BtnKwadrat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                kwadrat();
+                createAction( 6 );
             }
         });
         BtnSqrt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sqrt();
+                createAction( 7 );
             }
         });
         BtnLn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ln();
+                createAction( 8 );
+            }
+        });
+
+        BtnSin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                createAction( 9 );
+            }
+        });
+        BtnCos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                createAction( 10 );
+            }
+        });
+        BtnTan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                createAction( 11 );
+            }
+        });
+        BtnLog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                createAction( 12 );
             }
         });
 
@@ -249,31 +287,31 @@ public class AdvancedCalculator extends AppCompatActivity {
         BtnPlus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createNewAction( 1 );
+                createAction( 1 );
             }
         });
         BtnMinus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createNewAction( 2 );
+                createAction( 2 );
             }
         });
         BtnMultiply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createNewAction( 3 );
+                createAction( 3 );
             }
         });
         BtnDivide.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createNewAction( 4 );
+                createAction( 4 );
             }
         });
         BtnEquals.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createNewAction(-1);
+                createAction(-1);
             }
         });
         BtnDot.setOnClickListener(new View.OnClickListener() {
@@ -285,62 +323,210 @@ public class AdvancedCalculator extends AppCompatActivity {
 
     }
 
-    public void silnia(){
-        number = lcd.getText().toString();
+    public void createAction( int acti ){
+        if( acti == -1 ){
+            if( previousAction != -3 ){
+                if( changed == 1 )
+                    makeAction( previousAction );
+                previousAction = -3;
+            }
+        }else if( acti == 5 || acti == 6 || acti == 7 || acti == 8 || acti == 9 || acti == 10 || acti == 11 || acti == 12 ){
+            if( previousAction != -3 ){
+                makeAction( previousAction );
+            }
+            previousAction = -3;
+            number = lcd.getText().toString();
+            makeAction( acti );
+        }else{
+            if( changed == 1 || number.equals( "0" )) {
+                if (previousAction != -3){
+                    makeAction(previousAction);
+                     previousAction = acti;
+                 }else{
+                    previousAction = acti;
+                    if( changed == 1 )
+                        savedNumberD = numberD;
+                }
+            }else{
+                previousAction = acti;
+            }
+        }
 
-        if( !number.equals("") ){
-            int iloczyn = 1;
-            for (int i=1; i <= Integer.parseInt( number ); i++) {
-                iloczyn *= i;
+        number = "0";
+        numberD = new BigDecimal("0");
+        containDot = 0;
+        changed = 0;
+
+        lcd.setText( savedNumberD.toPlainString() );
+
+    }
+
+    public void makeAction( int _action ){
+        switch( _action ){
+            case 1: plus( );
+                break;
+            case 2: minus();
+                break;
+            case 3: multipy();
+                break;
+            case 4: divide();
+                break;
+            case 5:
+                    silnia();
+                break;
+            case 6: kwadrat();
+                break;
+            case 7:
+                    sqrt();
+                break;
+            case 8: ln();
+                break;
+            case 9: sin();
+                break;
+            case 10: cos();
+                break;
+            case 11: tan();
+                break;
+            case 12: log();
+            default: break;
+        }
+
+        number = "0";
+        numberD = new BigDecimal("0");
+        containDot = 0;
+        changed = 0;
+    }
+
+    public void plus( ){
+        savedNumberD = savedNumberD.add( numberD );
+    }
+
+    public void minus(){
+        savedNumberD = savedNumberD.subtract( numberD );
+    }
+
+    public void multipy(){
+        savedNumberD = savedNumberD.multiply( numberD );
+    }
+
+    public void divide(){
+        if( numberD.compareTo( BigDecimal.ZERO ) != 0 && changed == 1 )
+            savedNumberD = savedNumberD.divide( numberD, MathContext.DECIMAL32 );
+        else
+            Toast.makeText(getApplicationContext(), "Podano zły parametr", Toast.LENGTH_LONG).show();
+    }
+
+    public void silnia(){
+        if( changed == 1 )
+            if( isIntegerValue(numberD) ){
+                int iloczyn = 1;
+                for (int i=1; i <= numberD.intValue(); i++) {
+                    iloczyn *= i;
+                }
+
+                savedNumberD = new BigDecimal(Integer.toString(iloczyn));
+            }else{
+                Toast.makeText(getApplicationContext(), "Podano zły parametr", Toast.LENGTH_LONG).show();
+            }
+        else
+            if( isIntegerValue(savedNumberD) ){
+                int iloczyn = 1;
+                for (int i=1; i <= savedNumberD.intValue(); i++) {
+                    iloczyn *= i;
+                }
+
+                savedNumberD = new BigDecimal(Integer.toString(iloczyn));
+            }else{
+                Toast.makeText(getApplicationContext(), "Podano zły parametr", Toast.LENGTH_LONG).show();
             }
 
-            number = Integer.toString( iloczyn );
-            numberD = (float) Double.parseDouble( number );
-            lcd.setText( numberD.toString() );
-        }else{
-            Toast.makeText(getApplicationContext(),"Zly parametr",Toast.LENGTH_SHORT).show();
+
+    }
+
+    public void sin(){
+        if( changed == 1 )
+            savedNumberD = new BigDecimal( Math.sin( Double.parseDouble( number ) ) );
+        else
+            savedNumberD = new BigDecimal( Math.sin( savedNumberD.doubleValue() ) );
+    }
+
+    public void cos(){
+        if( changed == 1 )
+            savedNumberD = new BigDecimal( Math.cos( Double.parseDouble( number ) ) );
+        else
+            savedNumberD = new BigDecimal( Math.cos( savedNumberD.doubleValue() ) );
+    }
+
+    public void tan(){
+        if( changed == 1 )
+            savedNumberD = new BigDecimal( Math.tan( Double.parseDouble( number ) ) );
+        else
+            savedNumberD = new BigDecimal( Math.tan( savedNumberD.doubleValue() ) );
+    }
+
+    public void log(){
+        if( changed == 1 ) {
+            if( numberD.doubleValue() > 0 ){
+                savedNumberD = new BigDecimal( Math.log10(  Double.parseDouble( number )  ) );
+            }else{
+                Toast.makeText(getApplicationContext(),"Zly parametr",Toast.LENGTH_SHORT).show();
+            }
+        }else {
+            if( savedNumberD.doubleValue() > 0 ){
+                savedNumberD = new BigDecimal( Math.log10(  savedNumberD.doubleValue() ) );
+            }else{
+                Toast.makeText(getApplicationContext(),"Zly parametr",Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
     public void kwadrat(){
-        number = lcd.getText().toString();
-        numberD = Float.parseFloat( number ) * Float.parseFloat( number );
-
-        lcd.setText( numberD.toString() );
+        if( changed == 1 )
+            savedNumberD = numberD.pow(2);
+        else
+            savedNumberD = savedNumberD.pow(2);
     }
 
     public void sqrt(){
-        if( !number.equals("") && Integer.parseInt( number ) > 0 ){
-            number = lcd.getText().toString();
-            numberD = (float) Math.sqrt( Float.parseFloat( number ) );
-
-            lcd.setText( numberD.toString() );
-        }else{
-            Toast.makeText(getApplicationContext(),"Zly parametr",Toast.LENGTH_SHORT).show();
+        if( changed == 1 ) {
+            if( numberD.doubleValue() > 0 ){
+                savedNumberD = new BigDecimal( Math.sqrt(  Double.parseDouble( number )  ) );
+            }else{
+                Toast.makeText(getApplicationContext(),"Zly parametr",Toast.LENGTH_SHORT).show();
+            }
+        }else {
+            if( savedNumberD.doubleValue() > 0 ){
+                savedNumberD = new BigDecimal( Math.sqrt(  savedNumberD.doubleValue() ) );
+            }else{
+                Toast.makeText(getApplicationContext(),"Zly parametr",Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
     public void ln(){
-        if( !number.equals("") && Integer.parseInt( number ) > 0 ) {
-            number = lcd.getText().toString();
-            numberD = (float) Math.log(Float.parseFloat(number));
-
-            lcd.setText(numberD.toString());
-        }else{
-            Toast.makeText(getApplicationContext(),"Zly parametr",Toast.LENGTH_SHORT).show();
+        if( changed == 1 ) {
+            if( numberD.doubleValue() > 0 ){
+                savedNumberD = new BigDecimal( Math.log(  Double.parseDouble( number )  ) );
+            }else{
+                Toast.makeText(getApplicationContext(),"Zly parametr",Toast.LENGTH_SHORT).show();
+            }
+        }else {
+            if( savedNumberD.doubleValue() > 0 ){
+                savedNumberD = new BigDecimal( Math.log(  savedNumberD.doubleValue() ) );
+            }else{
+                Toast.makeText(getApplicationContext(),"Zly parametr",Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
     public void changeSign(){
-        number = lcd.getText().toString();
-        numberD = Float.parseFloat( number ) * -1;
-
+        numberD = numberD.negate();
         lcd.setText( numberD.toString() );
     }
 
     public void clearMemory(){
         memory = "0";
-        memoryD = 0.0f;
+        memoryD = new BigDecimal( "0" );
         Toast.makeText(getApplicationContext(),"M: " + memory,Toast.LENGTH_SHORT).show();
     }
 
@@ -353,15 +539,15 @@ public class AdvancedCalculator extends AppCompatActivity {
     }
 
     public void addToMemory(){
-        memoryD = memoryD + Float.parseFloat( lcd.getText().toString() );
-        memory = Float.toString( memoryD );
+        memoryD = memoryD.add( numberD );;
+        memory = memoryD.toString();
 
         Toast.makeText(getApplicationContext(),"M: " + memory,Toast.LENGTH_SHORT).show();
     }
 
     public void diffMemory(){
-        memoryD = memoryD - Float.parseFloat( lcd.getText().toString() );
-        memory = Float.toString( memoryD );
+        memoryD = memoryD.subtract( numberD );;
+        memory = memoryD.toString();
 
         Toast.makeText(getApplicationContext(),"M: " + memory,Toast.LENGTH_SHORT).show();
     }
@@ -370,52 +556,25 @@ public class AdvancedCalculator extends AppCompatActivity {
         action = -1;
         containDot = 0;
         addDot = 0;
+        changed = 0;
+        previousAction = -3;
 
-        savedNumber = "0";
-        number = "";
+        number = "0";
 
-        numberD = 0.0f;
-        savedNumberD = 0.0f;
+        savedNumberD = new BigDecimal( "0" );
+        numberD = new BigDecimal("0");
 
         lcd.setText( number );
     }
 
-    public void createNewAction( Integer action ){
+/*  public void createNewAction( Integer action ){
+
+        if( !number.equals("") ) {
         makeAction();
 
         this.action = action;
-        lcd.setText( savedNumber );
-    }
-
-    public void makeAction(){
-        switch( this.action ){
-            case -1:
-                savedNumberD = Float.parseFloat( lcd.getText().toString() );
-                break;
-            case 1: savedNumberD = numberD + savedNumberD;
-                break;
-            case 2: savedNumberD = savedNumberD - numberD;
-                break;
-            case 3: savedNumberD = savedNumberD * numberD;
-                break;
-            case 4: if( numberD != 0.0f && !number.equals("0") )
-                savedNumberD = savedNumberD / numberD;
-            else
-                Toast.makeText(getApplicationContext(),"Nie dzielimy przez zero :o",Toast.LENGTH_SHORT).show();
-                break;
-            default: break;
-        }
-
-        savedNumber = Float.toString( savedNumberD );
-
-        number = "";
-        numberD = 0.0f;
-        containDot = 0;
-
-        lcd.setText( number );
-
-        this.action = -1;
-    }
+        lcd.setText( savedNumber );}
+    }*/
 
     public void appendDot(){
         if( containDot == 0 ){
@@ -423,19 +582,28 @@ public class AdvancedCalculator extends AppCompatActivity {
                 number = "0";
 
             number = number + ".";
+            containDot = 1;
         }else{
             Toast.makeText(getApplicationContext(),"Liczbę możemy podzielić na co najwyżej dwie części",Toast.LENGTH_SHORT).show();
         }
 
         lcd.setText( number );
-        containDot = 1;
     }
 
     public void appendToEditText( int a ){
-        number = number + Integer.toString(a);
+        if( number.equals("0") ){
+            number = Integer.toString(a);
+        }else{
+            number = number + Integer.toString(a);
+        }
 
-        numberD = Float.parseFloat( number );
+        changed = 1;
+        numberD = new BigDecimal( number );
 
         lcd.setText( number );
+    }
+
+    private boolean isIntegerValue(BigDecimal bd) {
+        return bd.signum() == 0 || bd.scale() <= 0 || bd.stripTrailingZeros().scale() <= 0;
     }
 }

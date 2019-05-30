@@ -251,9 +251,10 @@ public class Calculator extends AppCompatActivity {
     }
 
     public void changeSign(){
-        number = lcd.getText().toString();
-        numberD = Float.parseFloat( number ) * -1;
-
+        if( !lcd.getText().equals("")) {
+            number = lcd.getText().toString();
+            numberD = Float.parseFloat(number) * -1;
+        }
         lcd.setText( numberD.toString() );
     }
 
@@ -300,9 +301,10 @@ public class Calculator extends AppCompatActivity {
     }
 
     public void createNewAction( Integer action ){
-        makeAction();
-
-        this.action = action;
+        if( !lcd.getText().equals("")) {
+            makeAction();
+            this.action = action;
+        }
         lcd.setText( savedNumber );
     }
 
